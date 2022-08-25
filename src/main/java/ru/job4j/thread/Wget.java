@@ -50,7 +50,7 @@ public class Wget implements Runnable {
             throw new IllegalArgumentException("Wrong number of arguments."
             + " Usage java -jar wget.jar URL DOWNLOAD_SPEED");
         }
-        String[] schemes = {"http","https"};
+        String[] schemes = {"http", "https"};
         UrlValidator urlValidator = new UrlValidator(schemes);
         if (!urlValidator.isValid(args[0])) {
             throw new IllegalArgumentException(String.format("Url not exist %s", args[0]));
