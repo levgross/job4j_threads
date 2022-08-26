@@ -1,13 +1,12 @@
 package ru.job4j.thread;
 
-
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 
 public class Wget implements Runnable {
 
@@ -22,8 +21,7 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream out = new FileOutputStream(
-                     String.format("downloaded_file.%s", FilenameUtils.getExtension(url)))) {
+             FileOutputStream out = new FileOutputStream(Paths.get(new URL(url).getPath()).getFileName().toString())) {
             long start = System.currentTimeMillis();
             long time;
             byte[] dataBuffer = new byte[1024];
@@ -37,9 +35,9 @@ public class Wget implements Runnable {
                     System.out.println(time);
                     if (time < 1000) {
                         Thread.sleep(1000 - time);
-                        start = System.currentTimeMillis();
-                        downloadData = 0;
                     }
+                    start = System.currentTimeMillis();
+                    downloadData = 0;
                 }
             }
         } catch (IOException e) {
