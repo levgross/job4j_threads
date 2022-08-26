@@ -4,26 +4,19 @@ import java.io.*;
 import java.util.function.Predicate;
 
 public final class ParseFile {
-    private final Parser parser;
+    private final File file;
 
-    public ParseFile(Parser parser) {
-        this.parser = parser;
+    public ParseFile(final File file) {
+        this.file = file;
     }
 
-    public String getContent(Predicate<Integer> filter) {
-        StringBuilder output = new StringBuilder("1");
-        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(parser.getFile()));
-             BufferedOutputStream out = new BufferedOutputStream(new OutputStream() {
-                 @Override
-                 public void write(int b) {
-                     output.append((char) b);
-                 }
-             })) {
-
+    private String getData(Predicate<Integer> filter) {
+        StringBuilder output = new StringBuilder();
+        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             int data;
             while ((data = in.read()) != -1) {
                 if (filter.test(data)) {
-                    out.write(data);
+                    output.append((char) data);
                 }
             }
         } catch (IOException e) {
@@ -32,10 +25,17 @@ public final class ParseFile {
         return output.toString();
     }
 
+    public String getContent() {
+        return getData(f -> true);
+    }
+
+    public String getContentWithoutUnicode() {
+        return getData(f -> f < 0x80);
+    }
+
     public static void main(String[] args) {
-        Parser parser = new Parser(new File("text.txt"));
-        ParseFile parseFile = new ParseFile(parser);
-        String text = parseFile.getContent(data -> data < 0x80);
-        System.out.println(text);
+        ParseFile pf = new ParseFile(new File("text.txt"));
+        SaveData sd = new SaveData(new File("destFile.txt"));
+        sd.saveContent(pf.getContent());
     }
 }
