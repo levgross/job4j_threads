@@ -8,7 +8,7 @@ class AccountStorageTest {
     @Test
     void whenAdd() {
         var storage = new AccountStorage();
-        storage.add(new Account(1, 100));
+        assertThat(storage.add(new Account(1, 100))).isTrue();
         var firstAccount = storage.getById(1)
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         assertThat(firstAccount.amount()).isEqualTo(100);
@@ -18,7 +18,7 @@ class AccountStorageTest {
     void whenUpdate() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
-        storage.update(new Account(1, 200));
+        assertThat(storage.update(new Account(1, 200))).isTrue();
         var firstAccount = storage.getById(1)
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         assertThat(firstAccount.amount()).isEqualTo(200);
@@ -28,7 +28,7 @@ class AccountStorageTest {
     void whenDelete() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
-        storage.delete(1);
+        assertThat(storage.delete(1)).isTrue();
         assertThat(storage.getById(1)).isEmpty();
     }
 
