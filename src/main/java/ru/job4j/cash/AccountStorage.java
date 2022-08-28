@@ -12,43 +12,28 @@ public class AccountStorage {
     private final HashMap<Integer, Account> accounts = new HashMap<>();
 
     public synchronized boolean add(Account account) {
-        int id = account.id();
-        if (getById(id).isPresent()) {
-            return false;
-        }
-        accounts.put(id, new Account(id, account.amount()));
-        return true;
+        return accounts.putIfAbsent(account.id(), new Account(account.id(), account.amount())) != null;
     }
 
     public synchronized boolean update(Account account) {
-        int id = account.id();
-        if (getById(id).isEmpty()) {
-            return false;
-        }
-        accounts.replace(id, new Account(id, account.amount()));
-        return true;
+        return accounts.replace(account.id(), new Account(account.id(), account.amount())) != null;
     }
 
     public synchronized boolean delete(int id) {
-        if (getById(id).isEmpty()) {
-            return false;
-        }
-        accounts.remove(id);
-        return true;
+        return accounts.remove(id) != null;
     }
 
     public synchronized Optional<Account> getById(int id) {
-        return accounts.containsKey(id) ? Optional.of(new Account(id, accounts.get(id).amount())) : Optional.empty();
+        return Optional.ofNullable(accounts.get(id));
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
         Optional<Account> fromAccount = getById(fromId);
         Optional<Account> toAccount = getById(toId);
-        if (amount <= 0 || fromAccount.isEmpty() || toAccount.isEmpty()) {
+        if (amount <= 0 || fromAccount.isEmpty() || toAccount.isEmpty() || amount > fromAccount.get().amount()) {
             return false;
         }
-        accounts.replace(fromId, new Account(fromId, fromAccount.get().amount() - amount));
-        accounts.replace(toId, new Account(toId, toAccount.get().amount() + amount));
-        return true;
+        return update(new Account(fromId, fromAccount.get().amount() - amount))
+        && update(new Account(toId, toAccount.get().amount() + amount));
     }
 }
