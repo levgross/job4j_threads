@@ -1,10 +1,9 @@
-package ru.job4j;
+package ru.job4j.buffer;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Queue;
 
 @ThreadSafe
@@ -13,29 +12,21 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
 
-    public void offer(T value) {
+    public void offer(T value) throws InterruptedException {
         synchronized (this) {
             while (!queue.offer(value)) {
-                try {
                     this.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
             }
             this.notify();
         }
     }
 
-    public T poll() {
+    public T poll() throws InterruptedException {
         synchronized (this) {
             while (queue.peek() == null) {
-                try {
                     this.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
             }
-            T res = new LinkedList<>(queue).poll();
+            T res = queue.poll();
             this.notify();
             return res;
         }
