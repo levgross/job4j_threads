@@ -12,10 +12,18 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
 
-    public void offer(T value) throws InterruptedException {
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    public void offer(T value) {
         synchronized (this) {
             while (!queue.offer(value)) {
+                try {
                     this.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
             this.notify();
         }
