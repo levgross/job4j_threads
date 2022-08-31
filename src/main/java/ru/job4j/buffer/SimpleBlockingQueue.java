@@ -12,26 +12,30 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
 
+    private final int capacity;
+
+    public SimpleBlockingQueue(int capacity) {
+        this.capacity = capacity;
+    }
+
     public synchronized boolean isEmpty() {
         return queue.isEmpty();
     }
 
-    public void offer(T value) {
+    public void offer(T value) throws InterruptedException {
         synchronized (this) {
-            while (!queue.offer(value)) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+            while (capacity <= queue.size()) {
+                this.wait();
             }
+
+            queue.offer(value);
             this.notify();
         }
     }
 
     public T poll() throws InterruptedException {
         synchronized (this) {
-            while (queue.peek() == null) {
+            while (queue.isEmpty()) {
                     this.wait();
             }
             T res = queue.poll();
