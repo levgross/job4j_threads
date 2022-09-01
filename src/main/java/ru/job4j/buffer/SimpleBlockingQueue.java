@@ -24,7 +24,7 @@ public class SimpleBlockingQueue<T> {
 
     public void offer(T value) throws InterruptedException {
         synchronized (this) {
-            while (capacity <= queue.size()) {
+            while (capacity == queue.size()) {
                 this.wait();
             }
 
