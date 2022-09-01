@@ -27,7 +27,6 @@ public class SimpleBlockingQueue<T> {
             while (capacity == queue.size()) {
                 this.wait();
             }
-
             queue.offer(value);
             this.notify();
         }
