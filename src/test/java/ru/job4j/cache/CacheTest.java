@@ -10,11 +10,11 @@ class CacheTest {
     @Test
     public void whenAddThenDelete() {
         Cache cache = new Cache();
-        Base first = new Base(1,0);
+        Base first = new Base(1, 0);
         first.setName("one");
-        Base second = new Base(2,0);
+        Base second = new Base(2, 0);
         second.setName("two");
-        Base third = new Base(3,0);
+        Base third = new Base(3, 0);
         third.setName("three");
         cache.add(first);
         cache.add(second);
@@ -29,12 +29,12 @@ class CacheTest {
     @Test
     public void whenUpdate() {
         Cache cache = new Cache();
-        Base first = new Base(1,0);
+        Base first = new Base(1, 0);
         first.setName("one");
         cache.add(first);
         first.setName("two");
         cache.update(first);
-        Base second = new Base(1,1);
+        Base second = new Base(1, 1);
         second.setName("two");
         Cache expected = new Cache();
         expected.add(second);
@@ -43,14 +43,14 @@ class CacheTest {
     @Test
     public void when2Updates() {
         Cache cache = new Cache();
-        Base first = new Base(1,0);
+        Base first = new Base(1, 0);
         first.setName("one");
         cache.add(first);
         first.setName("two");
         cache.update(first);
-        Base second = new Base(1,1);
+        Base second = new Base(1, 1);
         cache.update(second);
-        Base third = new Base(1,2);
+        Base third = new Base(1, 2);
         Cache expected = new Cache();
         expected.add(third);
         assertThat(cache).isEqualTo(expected);
