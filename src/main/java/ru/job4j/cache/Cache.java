@@ -24,8 +24,8 @@ public class Cache {
         }) != null;
     }
 
-    public void delete(Base model) {
-        memory.remove(model.getId());
+    public boolean delete(Base model) {
+        return memory.remove(model.getId()) != null;
     }
 
     @Override
@@ -33,22 +33,5 @@ public class Cache {
         return "Cache{"
                 + "memory=" + memory
                 + '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Cache cache = (Cache) o;
-        return Objects.equals(memory, cache.memory);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(memory);
     }
 }

@@ -16,14 +16,12 @@ class CacheTest {
         second.setName("two");
         Base third = new Base(3, 0);
         third.setName("three");
-        cache.add(first);
-        cache.add(second);
-        cache.add(third);
-        cache.delete(first);
-        cache.delete(third);
-        Cache expected = new Cache();
-        expected.add(second);
-        assertThat(cache).isEqualTo(expected);
+        assertThat(cache.add(first)).isTrue();
+        assertThat(cache.add(first)).isFalse();
+        assertThat(cache.add(second)).isTrue();
+        assertThat(cache.delete(first)).isTrue();
+        assertThat(cache.delete(first)).isFalse();
+        assertThat(cache.delete(third)).isFalse();
     }
 
     @Test
@@ -33,26 +31,6 @@ class CacheTest {
         first.setName("one");
         cache.add(first);
         first.setName("two");
-        cache.update(first);
-        Base second = new Base(1, 1);
-        second.setName("two");
-        Cache expected = new Cache();
-        expected.add(second);
-        assertThat(cache).isEqualTo(expected);
-    }
-    @Test
-    public void when2Updates() {
-        Cache cache = new Cache();
-        Base first = new Base(1, 0);
-        first.setName("one");
-        cache.add(first);
-        first.setName("two");
-        cache.update(first);
-        Base second = new Base(1, 1);
-        cache.update(second);
-        Base third = new Base(1, 2);
-        Cache expected = new Cache();
-        expected.add(third);
-        assertThat(cache).isEqualTo(expected);
+        assertThat(cache.update(first)).isTrue();
     }
 }
