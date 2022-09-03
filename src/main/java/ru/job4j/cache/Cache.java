@@ -19,7 +19,6 @@ public class Cache {
             }
             Base newBase = new Base(key, val.getVersion() + 1);
             newBase.setName(model.getName());
-            memory.replace(key, newBase);
             return newBase;
 
         }) != null;
