@@ -29,12 +29,8 @@ public class ThreadPool {
         }
     }
 
-    public void work(Runnable job) {
-        try {
+    public void work(Runnable job) throws InterruptedException {
             tasks.offer(job);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     public void shutdown() {
@@ -43,9 +39,13 @@ public class ThreadPool {
 
     public static void main(String[] args) {
         ThreadPool tp = new ThreadPool();
-        IntStream.range(0, 50).forEach((i) ->
-                tp.work(() -> System.out.println(Thread.currentThread().getName()))
-        );
+        IntStream.range(0, 50).forEach((i) -> {
+            try {
+                tp.work(() -> System.out.println(Thread.currentThread().getName()));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
         tp.shutdown();
     }
 }
