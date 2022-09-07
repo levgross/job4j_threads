@@ -37,9 +37,9 @@ public class RowColSum {
         int n = matrix.length;
         int raw = 0;
         int column = 0;
-        for (int i = 0; i < n; i++) {
-            raw += matrix[num][i];
-            column += matrix[i][num];
+        for (int j = 0; j < n; j++) {
+            raw += matrix[num][j];
+            column += matrix[j][num];
         }
         Sums sums = new Sums();
         sums.setRowSum(raw);
