@@ -6,9 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.*;
 
-import static ru.job4j.pool.RolColSum.*;
-
-class RolColSumTest {
+class RowColSumTest {
     @Test
     public void whenSimpleSum() {
         int[][] matrix = new int[][] {
@@ -16,13 +14,13 @@ class RolColSumTest {
                 {4, 5, 6},
                 {7, 8, 9}
         };
-        RolColSum.Sums[] sums = simpleSum(matrix);
+        Sums[] sums = RowColSum.simpleSum(matrix);
         int colSum = 0;
-        for (RolColSum.Sums s : sums) {
+        for (Sums s : sums) {
             colSum += s.getColSum();
         }
         int rowSum = 0;
-        for (RolColSum.Sums s : sums) {
+        for (Sums s : sums) {
             rowSum += s.getRowSum();
         }
         assertThat(colSum).isEqualTo(45);
@@ -36,13 +34,13 @@ class RolColSumTest {
                 {4, 5, 6},
                 {7, 8, 9}
         };
-        RolColSum.Sums[] sums = asyncSum(matrix);
+        Sums[] sums = RowColSum.asyncSum(matrix);
         int colSum = 0;
-        for (RolColSum.Sums s : sums) {
+        for (Sums s : sums) {
             colSum += s.getColSum();
         }
         int rowSum = 0;
-        for (RolColSum.Sums s : sums) {
+        for (Sums s : sums) {
             rowSum += s.getRowSum();
         }
         assertThat(colSum).isEqualTo(45);
